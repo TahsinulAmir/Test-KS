@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ProdukController::class, 'index']);
+
+Route::get('/login', [AuthController::class, 'index']);
+Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
+Route::get('/prosesLogout', [AuthController::class, 'prosesLogout']);
