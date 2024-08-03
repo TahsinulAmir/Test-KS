@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_order', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->primary();
             $table->integer('user_id');
             $table->integer('total_harga');
             $table->enum('status', ['Unpaid', ['Paid']]);
-            $table->string('bank');
-            $table->bigInteger('va');
+            $table->string('bank')->nullable();
+            $table->bigInteger('va')->nullable();
             $table->timestamps();
         });
     }

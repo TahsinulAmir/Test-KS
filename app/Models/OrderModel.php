@@ -11,5 +11,5 @@ class OrderModel extends Model
 
     protected $table = 'tb_order';
     protected $primaryKey = 'id';
-    protected $fillable = ['user_id', 'total_harga', 'status', 'bank', 'va'];
+    protected $fillable = ['id', 'user_id', 'total_harga', 'status', 'bank', 'va'];
 }

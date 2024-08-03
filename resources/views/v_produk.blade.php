@@ -12,13 +12,14 @@
                         <div class="img-box">
                             <img src="{{ asset('/assets/images/' . $item->foto) }}" alt="">
                             @if (Auth::guard('user')->check())
-                                <form action="/tambah-keranjang" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="produk_id" value="{{ $item->id }}">
-                                    <button class="add_cart_btn" type="submit">
-                                        <span>Add To Cart</span>
-                                    </button>
-                                </form>
+                                {{-- <form id="tambahKeranjang{{ $item->id }}"> --}}
+                                @csrf
+                                {{-- <input type="hidden" name="produk_id" id="produk_id" value="{{ $item->id }}"> --}}
+                                <button class="add_cart_btn" data-id="{{ $item->id }}"
+                                    id="tambahKeranjang{{ $item->id }}" name="produk_id" id="produk_id" type="submit">
+                                    <span>Add To Cart</span>
+                                </button>
+                                {{-- </form> --}}
                             @else
                                 <a href="/login" class="add_cart_btn">
                                     <span>Add To Cart</span>
@@ -44,3 +45,40 @@
         </div>
     </div>
 @endsection
+
+@push('myscript')
+    @foreach ($products as $item)
+        <script>
+            $(document).on('click', '#tambahKeranjang{{ $item->id }}', function(e) {
+                e.preventDefault();
+                // var produk_id = $('#produk_id').val();
+                var produk_id = $(this).data('id');
+
+                $.ajax({
+                    url: '/tambah-keranjang',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        produk_id: produk_id,
+                    },
+                    success: function(response) {
+
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: "Berhasil ditambahkan ke kerangjang!",
+                            icon: "success"
+                        })
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Gagal menambahkan ke keranjang!',
+                            icon: 'error',
+                            confirmButtonText: 'Oke'
+                        })
+                    }
+                });
+            });
+        </script>
+    @endforeach
+@endpush

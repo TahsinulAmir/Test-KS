@@ -30,7 +30,8 @@
     <!-- responsive style -->
     <link href="{{ asset('/') }}assets/css/responsive.css" rel="stylesheet" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
@@ -50,10 +51,11 @@
                                 <span>TokoQu</span>
                             </a>
                         </div>
-                        <div class="user_option_box ms-auto">
-                            <a href="" class="account-link">
+                        <div class="user_option_box ms-auto decoration-none">
+                            <a href="/" class="account-link ">
                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                <span>{{ Auth::guard('user')->check() ? Auth::guard('user')->user()->name : 'My Account' }}</span>
+                                <span
+                                    class="decoration-none">{{ Auth::guard('user')->check() ? Auth::guard('user')->user()->name : 'My Account' }}</span>
                             </a>
                             <a href="{{ url('/keranjang') }}" class="cart-link me-3">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -61,6 +63,14 @@
                                 {{-- <span
                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     99+ </span> --}}
+                            </a>
+                            <a href="{{ url('/order') }}" class="cart-link me-3">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                <span>Order</span>
+                            </a>
+                            <a href="{{ url('/prosesLogout') }}" class="cart-link me-3">
+                                <i class="fa fa-power-off" aria-hidden="true"></i>
+                                <span>Logout</span>
                             </a>
                         </div>
                     </div>
@@ -90,9 +100,10 @@
         </div>
     </footer>
     <!-- footer section -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
     <!-- jQery -->
-    {{-- <script src="{{ asset('/') }}assets/js/jquery-3.4.1.min.js"></script> --}}
     <!-- bootstrap js -->
     <script src="{{ asset('/') }}assets/js/boootstrap.js"></script>
     <!-- custom js -->

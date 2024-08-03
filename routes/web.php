@@ -25,6 +25,10 @@ Route::get('/prosesLogout', [AuthController::class, 'prosesLogout']);
 
 Route::get('/keranjang', [KeranjangController::class, 'keranjang']);
 Route::post('/tambah-keranjang', [KeranjangController::class, 'tambahKeranjang']);
+Route::post('/hapusKeranjang/{id}', [KeranjangController::class, 'hapusKeranjang']);
+Route::post('/updateJumlah/{id}', [KeranjangController::class, 'updateKeranjang']);
 
 Route::get('/order', [OrderController::class, 'index']);
-Route::post('/prosesOrder', [OrderController::class, 'prosesOrder']);
+Route::get('/order/{id}', [OrderController::class, 'detailOrder']);
+Route::post('/prosesOrder', [OrderController::class, 'prosesCheckout']);
+Route::post('/prosesPembayaran/{id}', [OrderController::class, 'prosesPembayaran']);

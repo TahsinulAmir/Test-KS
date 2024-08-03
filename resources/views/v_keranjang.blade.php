@@ -22,12 +22,23 @@
                             <tr>
                                 <td>{{ $item->produk }}</td>
                                 <td>
-                                    <input type="number" class="form-control" value="{{ $item->jumlah }}" min="1">
+                                    <form id="updateJumlah{{ $item->keranjang_id }}">
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <input type="number" class="form-control" name="jumlah{{ $item->keranjang_id }}" id="jumlah{{ $item->keranjang_id }}"
+                                                    value="{{ $item->jumlah }}" min="1">
+                                            </div>
+                                            <div class="col-auto">
+                                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </td>
                                 <td>Rp. {{ $item->harga }}</td>
                                 <td>Rp. {{ $item->jumlah * $item->harga }}</td>
                                 <td>
-                                    <button class="btn btn-danger btn-sm">Hapus</button>
+                                    <button class="btn btn-danger btn-sm btn-delete"
+                                        data-id="{{ $item->keranjang_id }}">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -39,36 +50,11 @@
                 </table>
             </div>
             <div class="text-right">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Checkout</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Pilih Bank</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="prosesOrder">
-                    <div class="modal-body">
-                        @csrf
-                        <div>
-                            <select class="form-select" name="bank" id="bank" aria-label="Default select example">
-                                <option selected disabled>-----Pilih Bank------</option>
-                                <option value="bri">BRI</option>
-                                <option value="bni">BNI</option>
-                                <option value="bca">BCA</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Checkout</button>
-                    </div>
-                </form>
+                @if ($count != 0)
+                    <form action="" id="prosesOrder">
+                        <button class="btn btn-primary" type="submit">Checkout</button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>
@@ -76,11 +62,11 @@
 
 @push('myscript')
     <script>
+        // Checkout
         $('#prosesOrder').on('submit', function(e) {
             e.preventDefault();
             var total_harga = '{{ $total_harga }}';
             var user_id = '{{ Auth::guard('user')->user()->id }}';
-            var bank = $('#bank').val();
 
             $.ajax({
                 url: '/prosesOrder',
@@ -89,29 +75,108 @@
                     _token: '{{ csrf_token() }}',
                     total_harga: total_harga,
                     user_id: user_id,
-                    bank: bank,
                 },
                 success: function(response) {
-                    // alert(response.message);
+
                     Swal.fire({
                         title: "Berhasil!",
-                        text: "Order Berhasil Dibuat!",
+                        text: "Silahkan Lanjutkan Pembayaran!",
                         icon: "success"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '/order';
+                            window.location.href = '/order/' + response.order_id;
                         }
                     });
                 },
                 error: function(xhr) {
                     Swal.fire({
                         title: 'Error!',
-                        text: 'Order Gagal Dibuat',
+                        text: 'Gagal Checkout!',
                         icon: 'error',
                         confirmButtonText: 'Oke'
                     })
                 }
             });
         });
+
+        // Konfirmasi Hapus
+        $(document).on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+
+            var id = $(this).data('id');
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Produk Akan Dihapus!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/hapusKeranjang/' + id,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Dihapus!',
+                                'Produk berhasil dihapus!',
+                                'success'
+                            );
+
+                            window.location.reload();
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Error!',
+                                'Gagal menghapus produk!',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
     </script>
+
+    {{-- Update Jumlah --}}
+    @foreach ($keranjang as $item)
+        <script>
+            $('#updateJumlah{{ $item->keranjang_id }}').on('submit', function(e) {
+                e.preventDefault();
+                var jumlah = $('#jumlah{{ $item->keranjang_id }}').val();
+
+                $.ajax({
+                    url: '/updateJumlah/{{ $item->keranjang_id }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        jumlah: jumlah,
+                    },
+                    success: function(response) {
+
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: "Jumlah Berhasil Diperbarui!",
+                            icon: "success"
+                        })
+                        window.location.reload();
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Jumlah Gagal Diperbarui!',
+                            icon: 'error',
+                            confirmButtonText: 'Oke'
+                        })
+                    }
+                });
+            });
+        </script>
+    @endforeach
 @endpush

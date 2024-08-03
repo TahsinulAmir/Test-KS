@@ -15,6 +15,7 @@
                             <th scope="col">Bank</th>
                             <th scope="col">Virtual Account</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,13 +26,13 @@
                                 <td>{{ Str::upper($item->bank) }}</td>
                                 <td>{{ $item->va }}</td>
                                 <td>{{ $item->status }}</td>
+                                <td>
+                                    <a href="{{ url('/order/'.$item->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-            <div class="text-right">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Checkout</button>
             </div>
         </div>
     </div>
