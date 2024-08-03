@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('tb_order', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('produk_id');
-            $table->integer('qty');
+            $table->integer('total_harga');
             $table->enum('status', ['Unpaid', ['Paid']]);
             $table->string('bank');
             $table->bigInteger('va');

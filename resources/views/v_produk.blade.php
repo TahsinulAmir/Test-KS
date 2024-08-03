@@ -11,11 +11,19 @@
                     <div class="box">
                         <div class="img-box">
                             <img src="{{ asset('/assets/images/' . $item->foto) }}" alt="">
-                            <a href="" class="add_cart_btn">
-                                <span>
-                                    Add To Cart
-                                </span>
-                            </a>
+                            @if (Auth::guard('user')->check())
+                                <form action="/tambah-keranjang" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="produk_id" value="{{ $item->id }}">
+                                    <button class="add_cart_btn" type="submit">
+                                        <span>Add To Cart</span>
+                                    </button>
+                                </form>
+                            @else
+                                <a href="/login" class="add_cart_btn">
+                                    <span>Add To Cart</span>
+                                </a>
+                            @endif
                         </div>
                         <div class="detail-box">
                             <h5>{{ $item->produk }}</h5>

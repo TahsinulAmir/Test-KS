@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +22,9 @@ Route::get('/', [ProdukController::class, 'index']);
 Route::get('/login', [AuthController::class, 'index']);
 Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
 Route::get('/prosesLogout', [AuthController::class, 'prosesLogout']);
+
+Route::get('/keranjang', [KeranjangController::class, 'keranjang']);
+Route::post('/tambah-keranjang', [KeranjangController::class, 'tambahKeranjang']);
+
+Route::get('/order', [OrderController::class, 'index']);
+Route::post('/prosesOrder', [OrderController::class, 'prosesOrder']);
