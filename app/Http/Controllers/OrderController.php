@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KeranjangModel;
 use App\Models\OrderModel;
+use App\Models\ProdukOrderModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,9 +28,21 @@ class OrderController extends Controller
             ->join('users', 'tb_order.user_id', '=', 'users.id')
             ->select('tb_order.*', 'users.name', 'users.email')
             ->first();
+
+        $produk_order = ProdukOrderModel::where('order_id', $id)
+            ->join('tb_produk', 'tb_produk_order.produk_id', '=', 'tb_produk.id')
+            ->get();
+
+        $total_harga = 0;
+        foreach ($produk_order as $key => $value) {
+            $total_harga += $value->harga * $value->qty;
+        }
+
         $data = [
             'title' => 'Detail Order',
-            'detail_order' => $order
+            'detail_order' => $order,
+            'produk_order' => $produk_order,
+            'total_order' => $total_harga
         ];
 
         return view('v_detail_order', $data);
@@ -43,7 +56,16 @@ class OrderController extends Controller
             'user_id' => $request->user_id,
             'total_harga' => $request->total_harga,
         ];
-        OrderModel::create($data);
+        $order = OrderModel::create($data);
+
+        $keranjang = KeranjangModel::where('user_id', $request->user_id)->get();
+        foreach ($keranjang as $key => $value) {
+            ProdukOrderModel::create([
+                'produk_id' => $value->produk_id,
+                'order_id' => $data['id'],
+                'qty' => $value->jumlah,
+            ]);
+        }
 
         KeranjangModel::where('user_id', $request->user_id)->delete();
 

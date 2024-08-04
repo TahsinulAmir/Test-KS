@@ -8,7 +8,7 @@
         <div class="invoice-box">
             <table cellpadding="0" cellspacing="0">
                 <tr class="top">
-                    <td colspan="2">
+                    <td colspan="3">
                         <table>
                             <tr>
                                 <td class="title">
@@ -40,21 +40,22 @@
                                 <td>
                                     {{ $detail_order->name }}<br>
                                     {{ $detail_order->email }}<br>
-                                    Sunnyville, CA 12345
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                <tr class="heading">
+                <tr class="heading col">
                     <td>
                         Metode Pembayaran
                     </td>
+                    <td></td>
+                    <td></td>
                     <td>
                         Virtual Account
                     </td>
                 </tr>
-                <tr class="details">
+                <tr class="details col">
                     <td>
                         Virtual Account ({{ Str::upper($detail_order->bank) }})
                     </td>
@@ -67,37 +68,38 @@
                         Item
                     </td>
                     <td>
+                        Pcs
+                    </td>
+                    <td>
                         Price
                     </td>
-                </tr>
-                <tr class="item">
                     <td>
-                        Website design
-                    </td>
-                    <td>
-                        $300.00
+                        Total
                     </td>
                 </tr>
-                <tr class="item">
-                    <td>
-                        Hosting (3 months)
-                    </td>
-                    <td>
-                        $75.00
-                    </td>
-                </tr>
-                <tr class="item last">
-                    <td>
-                        Domain name (1 year)
-                    </td>
-                    <td>
-                        $10.00
-                    </td>
-                </tr>
+                @foreach ($produk_order as $item)
+                    <tr class="item">
+                        <td>
+                            {{ $item->produk }}
+                        </td>
+                        <td>
+                            {{ $item->qty }}
+                        </td>
+                        <td>
+                            Rp. {{ $item->harga }}
+                        </td>
+                        <td>
+                            Rp. {{ $item->harga * $item->qty }}
+                        </td>
+                    </tr>
+                @endforeach
+
                 <tr class="total">
                     <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
-                        Total: $385.00
+                        <strong>Rp. {{ $total_order }}</strong>
                     </td>
                 </tr>
             </table>
