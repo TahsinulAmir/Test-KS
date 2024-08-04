@@ -69,7 +69,7 @@ class OrderController extends Controller
 
         KeranjangModel::where('user_id', $request->user_id)->delete();
 
-        return response()->json(['success' => 'Success', 'order_id' => time()]);
+        return response()->json(['success' => 'Success', 'order_id' => $data['id']]);
     }
 
     // Meminta Virtual Account

@@ -52,11 +52,12 @@
                             </a>
                         </div>
                         <div class="user_option_box ms-auto decoration-none">
-                            <a href="/" class="account-link ">
+                            <a href="{{ Auth::guard('user')->check() ? '/' : '/login' }}" class="account-link ">
                                 <i class="fa fa-user" aria-hidden="true"></i>
                                 <span
-                                    class="decoration-none">{{ Auth::guard('user')->check() ? Auth::guard('user')->user()->name : 'My Account' }}</span>
+                                    class="decoration-none">{{ Auth::guard('user')->check() ? Auth::guard('user')->user()->name : 'Login' }}</span>
                             </a>
+                            @if (Auth::guard('user')->check())
                             <a href="{{ url('/keranjang') }}" class="cart-link me-3">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 <span>Cart</span>
@@ -68,10 +69,11 @@
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 <span>Order</span>
                             </a>
-                            <a href="{{ url('/prosesLogout') }}" class="cart-link me-3">
-                                <i class="fa fa-power-off" aria-hidden="true"></i>
-                                <span>Logout</span>
-                            </a>
+                                <a href="{{ url('/prosesLogout') }}" class="cart-link me-3">
+                                    <i class="fa fa-power-off" aria-hidden="true"></i>
+                                    <span>Logout</span>
+                                </a>
+                            @endif
                         </div>
                     </div>
 

@@ -55,11 +55,12 @@
                         Virtual Account
                     </td>
                 </tr>
-                <tr class="details col">
+                <tr class="details">
                     <td>
                         Virtual Account ({{ Str::upper($detail_order->bank) }})
                     </td>
-                    <td>
+
+                    <td colspan="3">
                         <strong>{{ $detail_order->va }}</strong>
                     </td>
                 </tr>
